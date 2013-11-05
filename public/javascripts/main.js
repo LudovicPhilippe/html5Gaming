@@ -1,9 +1,9 @@
 $(function() {
     var clock = new THREE.Clock();
 
-    var container, divScore, paragraphScore;
+    var container;
 
-    var scene, renderer, camera, intScore =0;
+    var scene, renderer, camera, intScore = 0,isRunning = false;
     var score = document.createElement('div'),
         title = document.createElement('div'),
         btnLB = document.createElement('div'),
@@ -26,6 +26,62 @@ $(function() {
 
     var binormal = new THREE.Vector3();
     var normal = new THREE.Vector3();
+
+
+/*
+    var Sound = function ( sources, radius, volume ) {
+
+        var audio = document.createElement( 'audio' );
+
+        for ( var i = 0; i < sources.length; i ++ ) {
+
+            var source = document.createElement( 'source' );
+            source.src = sources[ i ];
+
+            audio.appendChild( source );
+
+        }
+
+        this.position = new THREE.Vector3();
+
+        this.play = function () {
+
+            audio.play();
+
+        }
+
+        this.update = function ( camera ) {
+
+            var distance = this.position.distanceTo( camera.position );
+
+            if ( distance <= radius ) {
+
+                audio.volume = volume * ( 1 - distance / radius );
+
+            } else {
+                audio.volume = 0;
+            }
+
+        }
+
+    }
+*/
+    var YouBetterWorkBitch = ['../songs/Enemy_explode.wav','../songs/Fire_smartbomb_low','../songs/Game_over.wav','../songs/Game_start.wav','../songs/Hi_Score_achieved.wav'];
+
+    var playSong = function(songToPlay){
+        var audio = document.createElement( 'audio' );
+        var source = document.createElement( 'source' );
+        source.src = songToPlay;
+        audio.appendChild( source );
+        audio.play();
+    }
+
+
+    /*
+    sound1 = new Sound( [ 'sounds/358232_j_s_song.mp3', 'sounds/358232_j_s_song.ogg' ], 275, 1 );
+    //sound1.position.copy( mesh1.position );
+    sound1.play();
+*/
 
     var gates = [];
 
@@ -117,13 +173,8 @@ $(function() {
 
     function mainMenuInit(){
 
-        if(check == true){
 
-            //var elem = document.getElementById(container);
-            document.parentNode.removeChild(container);
-
-            //$("#container").remove();
-        }
+        isRunning = false;
 
         containerMainMenu = document.createElement('div');
         containerMainMenu.setAttribute("id", "containerMainMenu");
@@ -175,12 +226,12 @@ $(function() {
 
 
     function secondMenuInit(){
-/*
-        if(check == true){
-            var elem = document.getElementById("container");
-            elem.parentNode.removeChild(elem);
-        }
-*/
+        /*
+         if(check == true){
+         var elem = document.getElementById("container");
+         elem.parentNode.removeChild(elem);
+         }
+         */
         containerSecondMenu = document.createElement('div');
         containerSecondMenu.setAttribute("id", "containerSecondMenu");
         containerSecondMenu.style.zIndex = 0;
@@ -307,6 +358,10 @@ $(function() {
 
     function init() {
 
+        playSong(YouBetterWorkBitch[3]);
+        t = 0;
+        isRunning = true;
+
         var elem = document.getElementById("containerMainMenu");
         elem.parentNode.removeChild(elem);
 
@@ -410,10 +465,11 @@ $(function() {
             if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.boum == false) {
                 console.log('collide red: you dead');
                 childObj.boum = true;
-                check = true;
-                mainMenuInit();
+                playSong(YouBetterWorkBitch[2]);
+                //check = true;
+                //mainMenuInit();
                 // don't check the green part if collide
-                //continue;
+                continue;
             }
             else{
                 childObj.boum = false;
@@ -434,11 +490,12 @@ $(function() {
             }
             score.innerHTML = '<p>' + intScore + '</p>';
         }
-        // */
 
         renderer.render(scene, camera);
 
-        requestAnimationFrame(render);
+        if(isRunning){
+            requestAnimationFrame(render);
+        }
     }
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
