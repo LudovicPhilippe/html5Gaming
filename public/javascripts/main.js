@@ -35,14 +35,22 @@ $(function() {
     var normal = new THREE.Vector3();
 
 
-    var sounds = ['../songs/Enemy_explode.wav','../songs/Fire_smartbomb_low','../songs/Game_over.wav','../songs/Game_start.wav','../songs/Hi_Score_achieved.wav'];
-
+    var sounds = ['../songs/Enemy_explode.wav','../songs/Fire_smartbomb_low.wav','../songs/Game_over.wav','../songs/Game_start.wav','../songs/Hi_Score_achieved.wav','../songs/Musics/modified Shekinah & Hyperflex - Kavacha Mantra.mp3'];
+    var audio;
     function playSound(songToPlay){
-        var audio = document.createElement( 'audio' );
+        audio = document.createElement( 'audio' );
         var source = document.createElement( 'source' );
         source.src = songToPlay;
         audio.appendChild( source );
         audio.play();
+    }
+
+    function stopSound(){
+        var audio = document.createElement( 'audio' );
+        var source = document.createElement( 'source' );
+        //source.src = songToPlay;
+        //audio.appendChild( source );
+        audio.stop();
     }
 
     var gates = [];
@@ -74,7 +82,8 @@ $(function() {
         var demiCircleMaterial = new THREE.MeshLambertMaterial({
             ambient: 0xFFFFFF,
             color: 0x0000FF,
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
+            opacity: 0.1,
         });
 
         var boundingBoxGeometry = new THREE.CubeGeometry(8, 4, 1);
@@ -84,7 +93,8 @@ $(function() {
             ambient: 0xFF0000,
             color: 0xFF0000,
             wireframe: true,
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
+            visible: false
         });
 
         var checkpointGeometry = new THREE.CubeGeometry(8, 8, 1);
@@ -93,7 +103,8 @@ $(function() {
             ambient: 0x00FF00,
             color: 0x00FF00,
             wireframe: true,
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
+            visible: false
         });
 
 
@@ -167,8 +178,6 @@ $(function() {
     mainMenuInit();
 
     function init() {
-
-        playSound(sounds[3]);
         t = 0;
         isRunning = true;
 
@@ -269,7 +278,7 @@ $(function() {
             if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.didCollide === false) {
                 console.log('collide red: you dead');
                 childObj.didCollide = true;
-                playSound(sounds[2]);
+                //playSound(sounds[2]);
                 stop();
                 continue;
             }
@@ -290,16 +299,16 @@ $(function() {
                 score.innerHTML = '<p>' + intScore + '</p>';
 
                 // Increase speed
-                looptime = Math.max(looptime * 0.99, 5000);
+                //looptime = Math.max(looptime * 0.99, 5000);
 
-                if (intScore === 10) {
-                    console.log('score vaut 10');
+                if ((intScore % 10 )== 0) {
+                    playSound(sounds[1]);
+                    looptime = Math.max(looptime * 0.8, 5000);
                 }
             }
             else {
                 childObj.didCollide = false;
             }
-
         }
 
         renderer.render(scene, camera);
@@ -310,15 +319,22 @@ $(function() {
     }
 
     function stop() {
+        //stopSound();
+        $.each($(audio), function () {
+            audio.pause();
+            console.log(this);
+        });
+        playSound(sounds[2]);
         isRunning = false;
         $('#containerMainMenu').show();
         $('#container').hide();
     }
 
     function start() {
+        playSound(sounds[5]);
         clock = new THREE.Clock();
         t = 0.1;
-        looptime = 15 * 1000;
+        looptime = 25 * 1000;
         isRunning = true;
         intScore = 0;
         $('#containerMainMenu').hide();
