@@ -4,6 +4,11 @@ html5Gaming
 html5 game project 3D
 
 
-Je dois faire un readme apparament... Alors j'en fait un !!! :)
+Node.js
+Express
+Mongoose
+THREE.js
+
+Jeu de reflexe dans un couloir en 3D
 
 Bisous !
