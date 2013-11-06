@@ -70,16 +70,20 @@ $(function() {
         y: 0
     };
 
+    var tubeMaterial;
     var CinquefoilKnot = new THREE.Curves.CinquefoilKnot(20);
 
     function addTube() {
         tube = new THREE.TubeGeometry(CinquefoilKnot, 800, 4, 24, true, false);
-        var tubeMaterial = new THREE.MeshLambertMaterial({
+
+
+        tubeMaterial = new THREE.MeshLambertMaterial({
             ambient: 0xFFFFFF,
             color: 0xFFFFFF,
             side: THREE.DoubleSide,
             wireframe: true
         });
+
         var tubeMesh = new THREE.Mesh(tube, tubeMaterial);
         parent.add(tubeMesh);
         tubeMesh.scale.set(scale, scale, scale);
@@ -248,6 +252,7 @@ $(function() {
         binormal.multiplyScalar(pickt - pick).add(tube.binormals[pick]);
         normal.copy(binormal).cross(dir);
 
+
         camera.position = pos;
 
         var lookAt = new THREE.Vector3();
@@ -278,13 +283,21 @@ $(function() {
         for (var i = 0; i < gates.length; i++) {
             var gate = gates[i];
             gate.rotation.z += gate.rotationDirection * rotationSpeed * delta;
+
             var color = new THREE.Color();
             var elapsedTime = clock.getElapsedTime();
-            color.setHSL(((elapsedTime % 12) / 12), 1, 0.5);
+            color.setHSL(((elapsedTime % 4) / 4), 1, 0.5);
             gate.material.color = color;
             gate.material.ambient = color;
 
             gate.updateMatrixWorld(true);
+
+            var colorTube = new THREE.Color();
+            var elapsedTimeTube = clock.getElapsedTime();
+            colorTube.setHSL(((elapsedTimeTube % 12) / 12), 1, 0.5);
+            //gate.material.color = colorTube;
+            tubeMaterial.ambient = colorTube;
+
 
             var childObj = gate.children[0];
             var cameraLocalPosition = cameraWorldPosition.clone();
