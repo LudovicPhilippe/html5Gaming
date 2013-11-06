@@ -26,7 +26,7 @@ $(function() {
     // Do a loop in 15 s
     var looptime = 15 * 1000;
 
-    var t = 0;
+    var t = 0.1;
 
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
@@ -35,22 +35,15 @@ $(function() {
     var normal = new THREE.Vector3();
 
 
-    var YouBetterWorkBitch = ['../songs/Enemy_explode.wav','../songs/Fire_smartbomb_low','../songs/Game_over.wav','../songs/Game_start.wav','../songs/Hi_Score_achieved.wav'];
+    var sounds = ['../songs/Enemy_explode.wav','../songs/Fire_smartbomb_low','../songs/Game_over.wav','../songs/Game_start.wav','../songs/Hi_Score_achieved.wav'];
 
-    var playSong = function(songToPlay){
+    function playSound(songToPlay){
         var audio = document.createElement( 'audio' );
         var source = document.createElement( 'source' );
         source.src = songToPlay;
         audio.appendChild( source );
         audio.play();
-    };
-
-
-    /*
-    sound1 = new Sound( [ 'sounds/358232_j_s_song.mp3', 'sounds/358232_j_s_song.ogg' ], 275, 1 );
-    //sound1.position.copy( mesh1.position );
-    sound1.play();
-*/
+    }
 
     var gates = [];
 
@@ -60,15 +53,6 @@ $(function() {
     };
 
     var CinquefoilKnot = new THREE.Curves.CinquefoilKnot(20);
-    /*
-    var sampleClosedSpline = new THREE.ClosedSplineCurve3([
-            new THREE.Vector3(0, -40, -40),
-            new THREE.Vector3(0, 40, -40),
-            new THREE.Vector3(0, 140, -40),
-            new THREE.Vector3(0, 40, 40),
-            new THREE.Vector3(0, -40, 40)
-        ]);
-    */
 
     function addTube() {
         tube = new THREE.TubeGeometry(CinquefoilKnot, 800, 4, 24, true, false);
@@ -129,15 +113,16 @@ $(function() {
             demiCircle.position.copy(position);
             demiCircle.lookAt(lookAt);
             demiCircle.rotation.z = Math.random() * Math.PI * 2.0;
+            demiCircle.rotationDirection = Math.random() < 0.5 ? -1 : 1;
             parentObject.add(demiCircle);
 
             var boundingBox = new THREE.Mesh(boundingBoxGeometry, boundingBoxMaterial);
             demiCircle.add(boundingBox);
-            boundingBox.boum = false;
+            boundingBox.didCollide = false;
 
             var checkpoint = new THREE.Mesh(checkpointGeometry, checkpointMaterial);
             demiCircle.add(checkpoint);
-            checkpoint.boum = false;
+            checkpoint.didCollide = false;
 
             gates.push(demiCircle);
         }
@@ -183,7 +168,7 @@ $(function() {
 
     function init() {
 
-        playSong(YouBetterWorkBitch[3]);
+        playSound(sounds[3]);
         t = 0;
         isRunning = true;
 
@@ -273,7 +258,7 @@ $(function() {
         // /*
         for (var i = 0; i < gates.length; i++) {
             var gate = gates[i];
-            gate.rotation.z += rotationSpeed * delta;
+            gate.rotation.z += gate.rotationDirection * rotationSpeed * delta;
 
             gate.updateMatrixWorld(true);
 
@@ -281,24 +266,24 @@ $(function() {
             var cameraLocalPosition = cameraWorldPosition.clone();
             childObj.worldToLocal(cameraLocalPosition);
 
-            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.boum === false) {
+            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.didCollide === false) {
                 console.log('collide red: you dead');
-                childObj.boum = true;
-                playSong(YouBetterWorkBitch[2]);
+                childObj.didCollide = true;
+                playSound(sounds[2]);
                 stop();
                 continue;
             }
-            else{
-                childObj.boum = false;
+            else {
+                childObj.didCollide = false;
             }
 
             childObj = gate.children[1];
             cameraLocalPosition.copy(cameraWorldPosition);
             childObj.worldToLocal(cameraLocalPosition);
 
-            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.boum === false) {
+            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.didCollide === false) {
                 console.log('collide green: nice');
-                childObj.boum = true;
+                childObj.didCollide = true;
 
                 // Increase score
                 intScore +=1;
@@ -311,15 +296,15 @@ $(function() {
                     console.log('score vaut 10');
                 }
             }
-            else{
-                childObj.boum = false;
+            else {
+                childObj.didCollide = false;
             }
 
         }
 
         renderer.render(scene, camera);
 
-        if(isRunning){
+        if (isRunning) {
             window.requestAnimationFrame(render);
         }
     }
