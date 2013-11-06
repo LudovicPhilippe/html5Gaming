@@ -296,6 +296,7 @@ $(function() {
                 // Increase score
                 intScore +=1;
                 score.innerHTML = '<p>' + intScore + '</p>';
+                //score.setValue(intScore);
 
                 // Increase speed
                 if ((intScore % 10 )== 0) {

@@ -24,7 +24,7 @@ module.exports.fetchSClosestScore = function(req, res){
 };
 
 module.exports.setScore = function(req, res){
-    var user = req.body.userName,
+    var user = req.body.pseudo,
         score = req.body.score;
 
     var Score = new scoreModel({

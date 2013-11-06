@@ -8,7 +8,13 @@ block content
 
     div#containerEndMenu
         h1#titleEnd FIN
-        input#btnPublishScore(type="button" value ="PublishScore")
+        h3 Publish your score
+            form#publish(action='/pub',method='post')
+                div
+                    input#addname(type="text"  placeholder="Your Name")
+                    br
+                    input#submitmail(type="submit" value="Submit")
+            p#publish_response
         input#btnReStart(type="button" value ="Play Again" )
         input#btnMainMenu(type="button" value ="Back to the main menu")
         input#btmLB(type="button" value ="Leaderboards" )
