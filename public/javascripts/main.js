@@ -11,15 +11,20 @@ $(function() {
 
     var scene, renderer, camera, intScore = 0;
 
-    var score = document.createElement('div'),
-        title = document.createElement('div'),
-        btnLB = document.createElement('div'),
-        btnStart = document.createElement('div');
+    var score = document.createElement('div');
 
-    var titleEnd = document.createElement('div'),
-        btnReStart = document.createElement('div'),
-        btnMainMenu = document.createElement('div'),
-        btnEndLB = document.createElement('div');
+    $( "#btnStart" ).click(function() {
+        start();
+    });
+
+    $( "#btnReStart" ).click(function() {
+        start();
+    });
+
+    $( "#btnMainMenu" ).click(function() {
+        switchEndToMain();
+    });
+
 
 
     var parent;
@@ -158,50 +163,10 @@ $(function() {
         }
     }
 
-    function mainMenuInit(){
-
-        var containerMainMenu = document.createElement('div');
-        containerMainMenu.setAttribute('id', 'containerMainMenu');
-        containerMainMenu.style.zIndex = 0;
-        document.body.appendChild(containerMainMenu);
-
-
-        title.style.position = 'absolute';
-        title.style.zIndex = 1000;
-        title.style.top = '10px';
-        title.style.width = '100%';
-        title.style.textAlign = 'center';
-        title.innerHTML = '<h1>' + 'html5Gaming' + '</h1>';
-
-
-        btnStart.style.position = 'absolute';
-        btnStart.style.zIndex = 1000;
-        btnStart.style.top = '200px';
-        btnStart.style.width = '100%';
-        btnStart.style.textAlign = 'center';
-        btnStart.innerHTML = '<button>' + 'Play' + '</button>';
-
-        btnStart.onclick = function() { start(); };
-
-        btnLB.style.position = 'absolute';
-        btnLB.style.zIndex = 1000;
-        btnLB.style.top = '400px';
-        btnLB.style.width = '100%';
-        btnLB.style.textAlign = 'center';
-        btnLB.innerHTML = '<button>' + 'LeaderBoards' + '</button>';
-
-        containerMainMenu.appendChild(title);
-        containerMainMenu.appendChild(btnStart);
-        containerMainMenu.appendChild(btnLB);
-    }
-    mainMenuInit();
 
     function init() {
         t = 0;
         isRunning = true;
-
-        var elem = document.getElementById('containerMainMenu');
-        elem.parentNode.removeChild(elem);
 
         container = document.createElement('div');
         container.setAttribute('id', 'container');
@@ -237,57 +202,6 @@ $(function() {
 
         container.appendChild(renderer.domElement);
         container.appendChild(score);
-    }
-
-    function endMenuInit(){
-
-        var containerEndMenu = document.createElement('div');
-        containerEndMenu.setAttribute('id', 'containerEndMenu');
-        containerEndMenu.style.zIndex = 0;
-        document.body.appendChild(containerEndMenu);
-
-
-        titleEnd.style.position = 'absolute';
-        titleEnd.style.display = 'none';
-        titleEnd.style.zIndex = 1000;
-        titleEnd.style.top = '10px';
-        titleEnd.style.width = '100%';
-        titleEnd.style.textAlign = 'center';
-        titleEnd.innerHTML = '<h1>' + 'Zetes mort, cest con hein ? score: '+ intScore +  '</h1>';
-
-
-        btnReStart.style.position = 'absolute';
-        btnReStart.style.display = 'none';
-        btnReStart.style.zIndex = 1000;
-        btnReStart.style.top = '200px';
-        btnReStart.style.width = '100%';
-        btnReStart.style.textAlign = 'center';
-        btnReStart.innerHTML = '<button>' + 'RePlay' + '</button>';
-
-        btnReStart.onclick = function() { start(); };
-
-        btnMainMenu.style.position = 'absolute';
-        btnMainMenu.style.display = 'none';
-        btnMainMenu.style.zIndex = 1000;
-        btnMainMenu.style.top = '300px';
-        btnMainMenu.style.width = '100%';
-        btnMainMenu.style.textAlign = 'center';
-        btnMainMenu.innerHTML = '<button>' + 'RePlay' + '</button>';
-
-        btnMainMenu.onclick = function() { /*stop();*/ switchEndToMain();};
-
-        btnEndLB.style.position = 'absolute';
-        btnEndLB.style.display = 'none';
-        btnEndLB.style.zIndex = 1000;
-        btnEndLB.style.top = '400px';
-        btnEndLB.style.width = '100%';
-        btnEndLB.style.textAlign = 'center';
-        btnEndLB.innerHTML = '<button>' + 'LeaderBoards' + '</button>';
-
-        containerEndMenu.appendChild(titleEnd);
-        containerEndMenu.appendChild(btnReStart);
-        containerEndMenu.appendChild(btnMainMenu);
-        containerEndMenu.appendChild(btnEndLB);
     }
 
 
@@ -407,10 +321,6 @@ $(function() {
         playSound(sounds[2]);
         isRunning = false;
         $('#containerEndMenu').show();
-        titleEnd.style.display = 'block';
-        btnReStart.style.display = 'block';
-        btnMainMenu.style.display = 'block';
-        btnEndLB.style.display = 'block';
         $('#container').hide();
     }
 
@@ -437,8 +347,7 @@ $(function() {
         mouse.y = event.clientY;
     }
 
-    mainMenuInit();
-    endMenuInit();
+    $('#containerMainMenu').show();
     init();
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
