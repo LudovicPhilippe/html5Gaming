@@ -1,14 +1,21 @@
 $(function() {
+    'use strict';
+
+    /* global THREE: false */
+
     var clock = new THREE.Clock();
 
     var container;
 
-    var scene, renderer, camera, intScore = 0,isRunning = false;
+    var isRunning = false;
+
+    var scene, renderer, camera, intScore = 0;
+
     var score = document.createElement('div'),
         title = document.createElement('div'),
         btnLB = document.createElement('div'),
-        btnStart = document.createElement('div'),
-        check = false;
+        btnStart = document.createElement('div');
+
     var parent;
     var tube;
     var scale = 20;
@@ -28,44 +35,6 @@ $(function() {
     var normal = new THREE.Vector3();
 
 
-/*
-    var Sound = function ( sources, radius, volume ) {
-
-        var audio = document.createElement( 'audio' );
-
-        for ( var i = 0; i < sources.length; i ++ ) {
-
-            var source = document.createElement( 'source' );
-            source.src = sources[ i ];
-
-            audio.appendChild( source );
-
-        }
-
-        this.position = new THREE.Vector3();
-
-        this.play = function () {
-
-            audio.play();
-
-        }
-
-        this.update = function ( camera ) {
-
-            var distance = this.position.distanceTo( camera.position );
-
-            if ( distance <= radius ) {
-
-                audio.volume = volume * ( 1 - distance / radius );
-
-            } else {
-                audio.volume = 0;
-            }
-
-        }
-
-    }
-*/
     var YouBetterWorkBitch = ['../songs/Enemy_explode.wav','../songs/Fire_smartbomb_low','../songs/Game_over.wav','../songs/Game_start.wav','../songs/Hi_Score_achieved.wav'];
 
     var playSong = function(songToPlay){
@@ -74,7 +43,7 @@ $(function() {
         source.src = songToPlay;
         audio.appendChild( source );
         audio.play();
-    }
+    };
 
 
     /*
@@ -88,25 +57,28 @@ $(function() {
     var mouse = {
         x: 0,
         y: 0
-    }
-    var CinquefoilKnot = new THREE.Curves.CinquefoilKnot(20),
-        sampleClosedSpline = new THREE.ClosedSplineCurve3([
+    };
+
+    var CinquefoilKnot = new THREE.Curves.CinquefoilKnot(20);
+    /*
+    var sampleClosedSpline = new THREE.ClosedSplineCurve3([
             new THREE.Vector3(0, -40, -40),
             new THREE.Vector3(0, 40, -40),
             new THREE.Vector3(0, 140, -40),
             new THREE.Vector3(0, 40, 40),
             new THREE.Vector3(0, -40, 40)
         ]);
+    */
 
     function addTube() {
         tube = new THREE.TubeGeometry(CinquefoilKnot, 800, 4, 24, true, false);
-        tubeMaterial = new THREE.MeshLambertMaterial({
+        var tubeMaterial = new THREE.MeshLambertMaterial({
             ambient: 0xFFFFFF,
             color: 0xFFFFFF,
             side: THREE.DoubleSide,
             wireframe: true
         });
-        tubeMesh = new THREE.Mesh(tube, tubeMaterial);
+        var tubeMesh = new THREE.Mesh(tube, tubeMaterial);
         parent.add(tubeMesh);
         tubeMesh.scale.set(scale, scale, scale);
     }
@@ -173,11 +145,8 @@ $(function() {
 
     function mainMenuInit(){
 
-
-        isRunning = false;
-
-        containerMainMenu = document.createElement('div');
-        containerMainMenu.setAttribute("id", "containerMainMenu");
+        var containerMainMenu = document.createElement('div');
+        containerMainMenu.setAttribute('id', 'containerMainMenu');
         containerMainMenu.style.zIndex = 0;
         document.body.appendChild(containerMainMenu);
 
@@ -187,7 +156,7 @@ $(function() {
         title.style.top = '10px';
         title.style.width = '100%';
         title.style.textAlign = 'center';
-        title.innerHTML = '<h1>' + "html5Gaming" + '</h1>';
+        title.innerHTML = '<h1>' + 'html5Gaming' + '</h1>';
 
 
         btnStart.style.position = 'absolute';
@@ -195,166 +164,22 @@ $(function() {
         btnStart.style.top = '200px';
         btnStart.style.width = '100%';
         btnStart.style.textAlign = 'center';
-        btnStart.innerHTML = '<button>' + "Play" + '</button>';
+        btnStart.innerHTML = '<button>' + 'Play' + '</button>';
 
-        btnStart.onclick = function() { init(); render(); };
+        btnStart.onclick = function() { start(); };
 
         btnLB.style.position = 'absolute';
         btnLB.style.zIndex = 1000;
         btnLB.style.top = '400px';
         btnLB.style.width = '100%';
         btnLB.style.textAlign = 'center';
-        btnLB.innerHTML = '<button>' + "LeaderBoards" + '</button>';
+        btnLB.innerHTML = '<button>' + 'LeaderBoards' + '</button>';
 
-        var sceneMenu = new THREE.Scene();
-        rendererMainMenu = new THREE.WebGLRenderer({
-            antialias: true
-        });
-        rendererMainMenu.setSize(window.innerWidth, window.innerHeight);
-
-        containerMainMenu.appendChild(rendererMainMenu.domElement);
         containerMainMenu.appendChild(title);
         containerMainMenu.appendChild(btnStart);
         containerMainMenu.appendChild(btnLB);
     }
     mainMenuInit();
-
-    //if(gameStart == true){
-    //init();
-    //render();
-    //}
-
-
-    function secondMenuInit(){
-        /*
-         if(check == true){
-         var elem = document.getElementById("container");
-         elem.parentNode.removeChild(elem);
-         }
-         */
-        containerSecondMenu = document.createElement('div');
-        containerSecondMenu.setAttribute("id", "containerSecondMenu");
-        containerSecondMenu.style.zIndex = 0;
-        document.body.appendChild(containerSecondMenu);
-
-
-        title.style.position = 'absolute';
-        title.style.zIndex = 1000;
-        title.style.top = '10px';
-        title.style.width = '100%';
-        title.style.textAlign = 'center';
-        title.innerHTML = '<h1>' + "html5Gaming" + '</h1>';
-
-
-        btnStart.style.position = 'absolute';
-        btnStart.style.zIndex = 1000;
-        btnStart.style.top = '200px';
-        btnStart.style.width = '100%';
-        btnStart.style.textAlign = 'center';
-        btnStart.innerHTML = '<button>' + "Play" + '</button>';
-
-        btnStart.onclick = function() { init(); render(); };
-
-        btnLB.style.position = 'absolute';
-        btnLB.style.zIndex = 1000;
-        btnLB.style.top = '400px';
-        btnLB.style.width = '100%';
-        btnLB.style.textAlign = 'center';
-        btnLB.innerHTML = '<button>' + "LeaderBoards" + '</button>';
-
-        rendererSecondMenu = new THREE.WebGLRenderer({
-            antialias: true
-        });
-        rendererSecondMenu.setSize(window.innerWidth, window.innerHeight);
-
-        containerSecondMenu.appendChild(rendererSecondMenu.domElement);
-        containerSecondMenu.appendChild(title);
-        containerSecondMenu.appendChild(btnStart);
-        containerSecondMenu.appendChild(btnLB);
-
-        //send score to server with player's name
-        $('#setScore').submit(function(e) {
-            var score = $('#score').val(),
-                userName = $('#userName').val();
-            function setScore(score, userName) {
-                $.post("/setScore", {score : score, userName : userName}, function(data) {
-                    if (data.error) {
-                        $('#setScore_response').text("Score saved");
-                    } else {
-                        $('#setScore_response').text("Error :(");
-                    }
-                }, 'json');
-            }
-            e.preventDefault();
-        });
-
-
-        function fetchSTopScore(){
-            //fetch top 10 score player's
-        }
-
-        function fetchSClosestScore(){
-            //fetch player's score and closest others player's score
-        }
-    }
-    //secondMenuInit();
-
-
-    function leaderBoardsMenuInit(){
-
-        if(check == true){
-            var elem = document.getElementById("container");
-            elem.parentNode.removeChild(elem);
-        }
-
-        containerleaderBoardsMenu = document.createElement('div');
-        containerleaderBoardsMenu.setAttribute("id", "containerleaderBoardsMenu");
-        containerleaderBoardsMenu.style.zIndex = 0;
-        document.body.appendChild(containerleaderBoardsMenu);
-
-
-        title.style.position = 'absolute';
-        title.style.zIndex = 1000;
-        title.style.top = '10px';
-        title.style.width = '100%';
-        title.style.textAlign = 'center';
-        title.innerHTML = '<h1>' + "html5Gaming" + '</h1>';
-
-
-        btnStart.style.position = 'absolute';
-        btnStart.style.zIndex = 1000;
-        btnStart.style.top = '200px';
-        btnStart.style.width = '100%';
-        btnStart.style.textAlign = 'center';
-        btnStart.innerHTML = '<button>' + "Play" + '</button>';
-
-        btnStart.onclick = function() { init(); render(); };
-
-        btnLB.style.position = 'absolute';
-        btnLB.style.zIndex = 1000;
-        btnLB.style.top = '400px';
-        btnLB.style.width = '100%';
-        btnLB.style.textAlign = 'center';
-        btnLB.innerHTML = '<button>' + "LeaderBoards" + '</button>';
-
-        rendererleaderBoardsMenu = new THREE.WebGLRenderer({
-            antialias: true
-        });
-        rendererleaderBoardsMenu.setSize(window.innerWidth, window.innerHeight);
-
-        containerleaderBoardsMenu.appendChild(rendererleaderBoardsMenu.domElement);
-        containerleaderBoardsMenu.appendChild(title);
-        containerleaderBoardsMenu.appendChild(btnStart);
-        containerleaderBoardsMenu.appendChild(btnLB);
-
-
-        function fetchSTopScore(){
-            //fetch top 10 score player's
-        }
-
-    }
-
-    //leaderBoardsMenuInit();
 
     function init() {
 
@@ -362,11 +187,11 @@ $(function() {
         t = 0;
         isRunning = true;
 
-        var elem = document.getElementById("containerMainMenu");
+        var elem = document.getElementById('containerMainMenu');
         elem.parentNode.removeChild(elem);
 
         container = document.createElement('div');
-        container.setAttribute("id", "container");
+        container.setAttribute('id', 'container');
         container.style.zIndex = 0;
         document.body.appendChild(container);
         score.style.position = 'absolute';
@@ -387,12 +212,6 @@ $(function() {
 
         camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 10000);
         parent.add(camera);
-
-        /*
-         var light = new THREE.PointLight(0xFFFFFF, 1.0, 1000);
-         light.position.set(0, 0, 0);
-         camera.add(light);
-         */
 
         addTube();
         addGates(parent, tube);
@@ -436,10 +255,10 @@ $(function() {
         var max = 4 * scale;
         var mouseX = (mouse.x - windowHalfX) / windowHalfX;
         var mouseY = -(mouse.y - windowHalfY) / windowHalfY; //trop fort
-        var vector = new THREE.Vector3(mouseX, mouseY, 0)
+        var vector = new THREE.Vector3(mouseX, mouseY, 0);
         vector.setLength(Math.min(vector.length(), 1.0)).multiplyScalar(max);
 
-        var matrix = new THREE.Matrix4()
+        var matrix = new THREE.Matrix4();
         matrix.makeRotationFromEuler(camera.rotation, camera.rotation.order);
         vector.applyMatrix4(matrix);
 
@@ -462,13 +281,11 @@ $(function() {
             var cameraLocalPosition = cameraWorldPosition.clone();
             childObj.worldToLocal(cameraLocalPosition);
 
-            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.boum == false) {
+            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.boum === false) {
                 console.log('collide red: you dead');
                 childObj.boum = true;
                 playSong(YouBetterWorkBitch[2]);
-                //check = true;
-                //mainMenuInit();
-                // don't check the green part if collide
+                stop();
                 continue;
             }
             else{
@@ -479,30 +296,59 @@ $(function() {
             cameraLocalPosition.copy(cameraWorldPosition);
             childObj.worldToLocal(cameraLocalPosition);
 
-            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.boum == false) {
+            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.boum === false) {
                 console.log('collide green: nice');
                 childObj.boum = true;
+
+                // Increase score
                 intScore +=1;
+                score.innerHTML = '<p>' + intScore + '</p>';
+
+                // Increase speed
                 looptime = Math.max(looptime * 0.99, 5000);
+
+                if (intScore === 10) {
+                    console.log('score vaut 10');
+                }
             }
             else{
                 childObj.boum = false;
             }
-            score.innerHTML = '<p>' + intScore + '</p>';
+
         }
 
         renderer.render(scene, camera);
 
         if(isRunning){
-            requestAnimationFrame(render);
+            window.requestAnimationFrame(render);
         }
     }
 
-    document.addEventListener('mousemove', onDocumentMouseMove, false);
+    function stop() {
+        isRunning = false;
+        $('#containerMainMenu').show();
+        $('#container').hide();
+    }
+
+    function start() {
+        clock = new THREE.Clock();
+        t = 0.1;
+        looptime = 15 * 1000;
+        isRunning = true;
+        intScore = 0;
+        $('#containerMainMenu').hide();
+        $('#container').show();
+        render();
+    }
 
     function onDocumentMouseMove(event) {
         event.preventDefault();
         mouse.x = event.clientX;
         mouse.y = event.clientY;
     }
+
+    mainMenuInit();
+    init();
+
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
 });
