@@ -35,9 +35,9 @@ $(function() {
     var rotationSpeed = ((2.0 * Math.PI) / 4.0) / 1000;
 
     // Do a loop in 15 s
-    var looptime = 15 * 1000;
+    var looptime;
 
-    var t = 0.1;
+    var t = 0.0;
 
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
@@ -101,14 +101,17 @@ $(function() {
     }
 
     function addGates(parentObject, tubeGeometry) {
-        var MAX_GATES = 13;
+        var MAX_GATES = 20;
 
         var demiCircleGeometry = new THREE.CircleGeometry(4, 80, 0, Math.PI);
         var demiCircleMaterial = new THREE.MeshLambertMaterial({
             ambient: 0xFFFFFF,
             color: 0x0000FF,
             side: THREE.DoubleSide,
-            opacity: 1.0,
+            transparent: true,
+            depthWrite: false,
+            opacity: 0.8,
+            combine: THREE.MixOperation
         });
 
         var boundingBoxGeometry = new THREE.CubeGeometry(8, 4, 1);
@@ -275,7 +278,9 @@ $(function() {
             var cameraLocalPosition = cameraWorldPosition.clone();
             childObj.worldToLocal(cameraLocalPosition);
 
-            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.didCollide === false) {
+            if (clock.getElapsedTime() > 1.0 &&
+                childObj.geometry.boundingBox.containsPoint(cameraLocalPosition)&&
+                childObj.didCollide === false) {
                 console.log('collide red: you dead');
                 childObj.didCollide = true;
                 stop();
@@ -289,7 +294,9 @@ $(function() {
             cameraLocalPosition.copy(cameraWorldPosition);
             childObj.worldToLocal(cameraLocalPosition);
 
-            if (childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) && childObj.didCollide === false) {
+            if (clock.getElapsedTime() > 1.0 &&
+                childObj.geometry.boundingBox.containsPoint(cameraLocalPosition) &&
+                childObj.didCollide === false) {
                 console.log('collide green: nice');
                 childObj.didCollide = true;
 
@@ -301,7 +308,7 @@ $(function() {
                 // Increase speed
                 if ((intScore % 10 )== 0) {
                     playSound(sounds[1]);
-                    looptime = Math.max(looptime * 0.8, 5000);
+                    looptime = Math.max(looptime * 0.9, 5000);
                 }
             }
             else {
@@ -328,8 +335,8 @@ $(function() {
     function start() {
         playMusic();
         clock = new THREE.Clock();
-        t = 0.1;
-        looptime = 25 * 1000;
+        t = 0.0;
+        looptime = 20 * 1000;
         isRunning = true;
         intScore = 0;
         $('#containerMainMenu').hide();
