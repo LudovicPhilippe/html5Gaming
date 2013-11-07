@@ -36,16 +36,9 @@ $(function() {
     $( "#btnswitchEndToLeaders" ).click(function() {
         switchEndToLeaders();
     });
-/*
-*
-*     function switchMainToLeaders(){
- $('#containerMainMenu').hide();
- $('#leaderboardsMenu').show();
- }
- function switchLeadersToMain(){
-*
-* */
-
+    $( "#containerEndMenu").hide();
+    $( "#leaderboardsMenu").hide();
+    $('#submitResponse').hide();
 
     var parent;
     var tube;
@@ -272,7 +265,6 @@ $(function() {
 
 
         // Gates Anim;
-        // /*
         for (var i = 0; i < gates.length; i++) {
             var gate = gates[i];
             gate.rotation.z += gate.rotationDirection * rotationSpeed * delta;
@@ -288,7 +280,6 @@ $(function() {
             var colorTube = new THREE.Color();
             var elapsedTimeTube = clock.getElapsedTime();
             colorTube.setHSL(((elapsedTimeTube % 12) / 12), 1, 0.5);
-            //gate.material.color = colorTube;
             tubeMaterial.ambient = colorTube;
 
 
@@ -322,7 +313,6 @@ $(function() {
                 intScore +=1;
                 score.innerHTML = '<p>' + intScore + '</p>';
                 score.value=intScore;
-                //score.val()= (intScore);
 
                 // Increase speed
                 if ((intScore % 10 )== 0) {
@@ -347,12 +337,21 @@ $(function() {
         music.pause();
         playSound(sounds[2]);
         isRunning = false;
+        $('#publish0').show();
+        $('#submitResponse').hide();
+        $('canvas').hide();
+        $('header').show();
         $('#containerEndMenu').show();
         fetchClosestScore(intScore, successFetchClosestScoreCbk, failureFetchClosestScoreCbk);
         $('#container').hide();
     }
 
     function start() {
+        $('canvas').show();
+        $( "#closestScore1" ).empty();
+        $( "#closestScore2" ).empty();
+        $( "#YouAreHere" ).empty();
+        $('header').hide();
         playMusic();
         clock = new THREE.Clock();
         t = 0.0;
@@ -367,6 +366,9 @@ $(function() {
 
     function switchEndToMain(){
         $('#containerEndMenu').hide();
+        $( "#closestScore1" ).empty();
+        $( "#closestScore2" ).empty();
+        $( "#YouAreHere" ).empty();
         $('#containerMainMenu').show();
     }
     function switchMainToLeaders(){
@@ -376,9 +378,13 @@ $(function() {
     }
     function switchLeadersToMain(){
         $('#leaderboardsMenu').hide();
+        $( "#leader" ).empty();
         $('#containerMainMenu').show();
     }
     function switchEndToLeaders(){
+        $( "#closestScore1" ).empty();
+        $( "#closestScore2" ).empty();
+        $( "#YouAreHere" ).empty();
         $('#containerEndMenu').hide();
         $('#leaderboardsMenu').show();
         fetchSTopScore(successFetchLeadersScoreCbk, failureFetchClosestScoreCbk);
@@ -394,7 +400,7 @@ $(function() {
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
-    $('#publish').submit(function(e) {
+    $('#publish').click(function(e) {
         var pseudo = $('#addname').val(),
             score = $('#score').val();
         setScore(pseudo, score, successTfCbk, failureTfCbk);

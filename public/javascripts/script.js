@@ -3,8 +3,8 @@
 //          SET_SCORE         //
 ////////////////////////////////
 var successTfCbk = function(data){
-    $('#publish').hide();
-    $('#publish_response').text("Score sent !");
+    $('#publish0').hide();
+    $('#submitResponse').show();
 };
 
 var failureTfCbk = function(data){
@@ -27,14 +27,11 @@ function setScore(pseudo, score, onSuccess, onFailure) {
 
 var successFetchClosestScoreCbk = function(data){
     for(var i in data.prevScore){
-        $('#closestScore').append(data.prevScore[i].userName + "  : " + data.prevScore[i].score);
-        $('#closestScore').append('</br>');
+        $('#closestScore1').append('<span class="name">'+ data.prevScore[i].userName +'</span>'+ '<span class="score">'+ data.prevScore[i].score +'</span>' + '</br>');
     }
-    $('#closestScore').append("Vous etes ici ! : " +$('#score').val());
-    $('#closestScore').append('</br>');
+    $('#YouAreHere').append('<span class="name">'+ "You score " +'</span>'+ '<span class="score">'+ $('#score').val() +'</span>'+ '</br>');
     for(var i in data.nextScore){
-        $('#closestScore').append(data.nextScore[i].userName + "  : " + data.nextScore[i].score);
-        $('#closestScore').append('</br>');
+        $('#closestScore2').append('<span class="name">'+ data.nextScore[i].userName +'</span>'+ '<span class="score">'+ data.nextScore[i].score +'</span>'+ '</br>');
     }
 };
 
@@ -59,10 +56,10 @@ function fetchClosestScore(score, onSuccess, onFailure) {
 
 
 var successFetchLeadersScoreCbk = function(data){
-    console.log(data);
+    var beurk = 1;
     for(var i in data.topScores){
-        $('#leader').append(data.topScores[i].userName + "  : " + data.topScores[i].score);
-        $('#leader').append('</br>');
+        $('#leader').append('<span class="rank">'+ "#" + beurk +'</span>'+ '<span class="name">'+ data.topScores[i].userName +'</span>' + '<span class="score">'+ data.topScores[i].score +'</span>' +'</br>' );
+        beurk++;
     }
 };
 
