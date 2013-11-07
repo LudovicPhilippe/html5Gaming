@@ -1,4 +1,6 @@
-var Score = require('../models/score');
+var  async = require('async'),
+    mongoose = require('mongoose'),
+    Score = require('../models/score').score;
 
 module.exports.fetchSTopScore = function(req, res){
     //fetch top 10 score player's
@@ -27,20 +29,18 @@ module.exports.setScore = function(req, res){
     var user = req.body.pseudo,
         score = req.body.score;
 
-    var Score = new scoreModel({
+    var scoreT = new Score({
         userName : user,
         score : score});
 
-    async.parallel([
-        function(done) {
-            Score.save(done);
+    scoreT.save(function(err) {
+        if(err){
+            console.log(err);
+            return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err.message, success : false}));
         }
-    ], function(err) {
-        if (err) {
-            return done(err);
-        }
-        return res.end(JSON.stringify({error: null, success: true}));
-    })
+        console.log("success");
+        return res.end(JSON.stringify({error: null, errorMessage: null, success: true}));
+    });
 };
 
 exports.index = function(req, res){

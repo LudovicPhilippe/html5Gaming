@@ -56,7 +56,6 @@ $(function() {
     var music = document.createElement('audio');
 
     function playSound(songToPlay){
-
         if(audio ){
             audio.removeAttribute("src");
         }
@@ -86,8 +85,6 @@ $(function() {
 
     function addTube() {
         tube = new THREE.TubeGeometry(CinquefoilKnot, 800, 4, 24, true, false);
-
-
         tubeMaterial = new THREE.MeshLambertMaterial({
             ambient: 0xFFFFFF,
             color: 0xFFFFFF,
@@ -175,6 +172,7 @@ $(function() {
         container.setAttribute('id', 'container');
         container.style.zIndex = 0;
         document.body.appendChild(container);
+        score.setAttribute('id', 'score');
         score.style.position = 'absolute';
         score.style.zIndex = 1000;
         score.style.top = '10px';
@@ -303,7 +301,8 @@ $(function() {
                 // Increase score
                 intScore +=1;
                 score.innerHTML = '<p>' + intScore + '</p>';
-                //score.setValue(intScore);
+                score.value=intScore;
+                //score.val()= (intScore);
 
                 // Increase speed
                 if ((intScore % 10 )== 0) {

@@ -1,12 +1,15 @@
-var mongoose = require('mongoose');
+'use strict';
 
-// Création du schéma pour l'inscription
-var scoreSchema = new mongoose.Schema({
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
+
+var scoreSchema = new Schema({
     score : String,
     userName : String
 });
 
-// Création du Model pour l'inscription
-var scoreModel= mongoose.model('score', scoreSchema);
 
-module.exports =  scoreModel;
+module.exports = {
+    'scoreSchema': scoreSchema,
+    'score': mongoose.model('score', scoreSchema)
+};
