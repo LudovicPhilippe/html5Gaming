@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var scoreSchema = new Schema({
-    score : String,
+    score : Number,
     userName : String
 });
 

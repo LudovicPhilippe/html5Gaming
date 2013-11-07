@@ -5,32 +5,32 @@ var  async = require('async'),
 module.exports.fetchSTopScore = function(req, res){
     //fetch top 10 score player's
 
-    Score.find({ 'score': score}, function (err, results) {
+
+    Score.find().limit(10).sort({ "score" : -1 }).exec(function(err,results){
         if (!results){
-            console.log("oups");
+            return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
         }
-        return res.end(JSON.stringify({topScores : results,success : true}));
-    })
+        return res.end(JSON.stringify({topScores : results, success : true}));
+    });
+
+
 };
 
 module.exports.fetchSClosestScore = function(req, res){
     //fetch player's score and closest others player's score
     var score = req.body.score;
-    /*
-    Score.find({ "score" : { "$lt" : score } }).limit(10).sort({ "score" : -1 }),function(err,results){
+
+    Score.find({ "score" : { "$lt" : score } }).limit(5).sort({ "score" : -1 }).exec(function(err,results){
         if (!results){
             return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
         }
-        Score.find({ "score" : { "$gt" : score } }).limit(10).sort({ "score" : 1 }),function(err,results2){
+        Score.find({ "score" : { "$gt" : score } }).limit(5).sort({ "score" : 1 }).exec(function(err,results2){
             if (!results2){
                 return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
             }
-            return res.end(JSON.stringify({prevScore : results, nextScore: results2,success : true}));
-        }
-    };*/
-    var results = Score.find({ "score" : { "$gt" : score } }).limit(10).sort({ "score" : 1 });
-    var results2 = Score.find({ "score" : { "$lt" : score } }).limit(10).sort({ "score" : -1 });
-    return res.end(JSON.stringify({prevScore : results, nextScore: results2,success : true}));
+            return res.end(JSON.stringify({prevScore : results2, nextScore: results,success : true}));
+        });
+    });
 };
 
 module.exports.setScore = function(req, res){

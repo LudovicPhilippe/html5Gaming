@@ -25,6 +25,26 @@ $(function() {
         switchEndToMain();
     });
 
+    $( "#btnswitchMainToLeaders" ).click(function() {
+        switchMainToLeaders();
+    });
+
+    $( "#btnMainMenu0" ).click(function() {
+        switchLeadersToMain();
+    });
+
+    $( "#btnswitchEndToLeaders" ).click(function() {
+        switchEndToLeaders();
+    });
+/*
+*
+*     function switchMainToLeaders(){
+ $('#containerMainMenu').hide();
+ $('#leaderboardsMenu').show();
+ }
+ function switchLeadersToMain(){
+*
+* */
 
 
     var parent;
@@ -328,7 +348,7 @@ $(function() {
         playSound(sounds[2]);
         isRunning = false;
         $('#containerEndMenu').show();
-        $('#closestScore').click();
+        fetchClosestScore(intScore, successFetchClosestScoreCbk, failureFetchClosestScoreCbk);
         $('#container').hide();
     }
 
@@ -349,6 +369,20 @@ $(function() {
         $('#containerEndMenu').hide();
         $('#containerMainMenu').show();
     }
+    function switchMainToLeaders(){
+        $('#containerMainMenu').hide();
+        $('#leaderboardsMenu').show();
+        fetchSTopScore(successFetchLeadersScoreCbk, failureFetchClosestScoreCbk);
+    }
+    function switchLeadersToMain(){
+        $('#leaderboardsMenu').hide();
+        $('#containerMainMenu').show();
+    }
+    function switchEndToLeaders(){
+        $('#containerEndMenu').hide();
+        $('#leaderboardsMenu').show();
+        fetchSTopScore(successFetchLeadersScoreCbk, failureFetchClosestScoreCbk);
+    }
     function onDocumentMouseMove(event) {
         event.preventDefault();
         mouse.x = event.clientX;
@@ -359,4 +393,11 @@ $(function() {
     init();
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
+
+    $('#publish').submit(function(e) {
+        var pseudo = $('#addname').val(),
+            score = $('#score').val();
+        setScore(pseudo, score, successTfCbk, failureTfCbk);
+        e.preventDefault();
+    });
 });

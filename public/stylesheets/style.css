@@ -66,3 +66,15 @@ body {
     margin-top: 600px;
 }
 
+
+
+#leaderboardsMenu{
+    display: none;
+    z-index: 0;
+}
+#leaderboards{
+
+}
+#leader{
+
+}
