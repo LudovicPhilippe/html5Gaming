@@ -34,6 +34,13 @@ app.post('/fetchSTopScore', index.fetchSTopScore);
 app.post('/fetchSClosestScore',index.fetchSClosestScore);
 app.post('/setScore', index.setScore);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+var mongo = require('./models/Mongo');
+mongo.initialize();
+mongo.connect(function(err) {
+    if (err) {
+        throw err;
+    }
+    http.createServer(app).listen(app.get('port'), function(){
+        console.log('Express server listening on port ' + app.get('port'));
+    });
 });

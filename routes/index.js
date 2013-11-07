@@ -36,7 +36,7 @@ module.exports.setScore = function(req, res){
     scoreT.save(function(err) {
         if(err){
             console.log(err);
-            return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err.message, success : false}));
+            return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
         }
         console.log("success");
         return res.end(JSON.stringify({error: null, errorMessage: null, success: true}));
