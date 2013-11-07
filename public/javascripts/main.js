@@ -328,6 +328,7 @@ $(function() {
         playSound(sounds[2]);
         isRunning = false;
         $('#containerEndMenu').show();
+        $('#closestScore').click();
         $('#container').hide();
     }
 

@@ -16,13 +16,21 @@ module.exports.fetchSTopScore = function(req, res){
 module.exports.fetchSClosestScore = function(req, res){
     //fetch player's score and closest others player's score
     var score = req.body.score;
-
-    Score.findOne({ 'score': score}, function (err, results) {
+    /*
+    Score.find({ "score" : { "$lt" : score } }).limit(10).sort({ "score" : -1 }),function(err,results){
         if (!results){
-            console.log("oups");
+            return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
         }
-        return res.end(JSON.stringify({closestScores : results,success : true}));
-    })
+        Score.find({ "score" : { "$gt" : score } }).limit(10).sort({ "score" : 1 }),function(err,results2){
+            if (!results2){
+                return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
+            }
+            return res.end(JSON.stringify({prevScore : results, nextScore: results2,success : true}));
+        }
+    };*/
+    var results = Score.find({ "score" : { "$gt" : score } }).limit(10).sort({ "score" : 1 });
+    var results2 = Score.find({ "score" : { "$lt" : score } }).limit(10).sort({ "score" : -1 });
+    return res.end(JSON.stringify({prevScore : results, nextScore: results2,success : true}));
 };
 
 module.exports.setScore = function(req, res){
@@ -44,5 +52,5 @@ module.exports.setScore = function(req, res){
 };
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Express' });
 };
