@@ -68,6 +68,35 @@ $(function() {
     var audio = document.createElement('audio');
     var music = document.createElement('audio');
 
+	var havePointerLock =   'pointerLockElement' in document ||
+							'mozPointerLockElement' in document ||
+							'webkitPointerLockElement' in document;
+
+	if (havePointerLock) {
+		document.body.requestPointerLock =	document.body.requestPointerLock ||
+											document.body.mozRequestPointerLock ||
+											document.body.webkitRequestPointerLock;
+
+		document.exitPointerLock =	document.exitPointerLock ||
+									document.mozExitPointerLock ||
+									document.webkitExitPointerLock;
+	}
+
+	var haveFullscreen =	'fullscreenElement' in document ||
+							'mozFullScreen' in document ||
+							'webkitIsFullScreen' in document;
+
+	if (haveFullscreen) {
+		document.body.requestFullscreen =	document.body.requestFullscreen ||
+											document.body.mozRequestFullScreen ||
+											document.body.webkitRequestFullScreen;
+
+		document.exitFullscreen =	document.exitFullscreen ||
+									document.mozCancelFullScreen ||
+									document.webkitCancelFullScreen;
+	}
+
+
     function playSound(songToPlay){
         if(audio ){
             audio.removeAttribute("src");
@@ -184,6 +213,7 @@ $(function() {
         container = document.createElement('div');
         container.setAttribute('id', 'container');
         container.style.zIndex = 0;
+		container.style.overflow = 'hidden';
         document.body.appendChild(container);
         score.setAttribute('id', 'score');
         score.style.position = 'absolute';
@@ -333,7 +363,11 @@ $(function() {
     }
 
     function stop() {
-        audio.pause();
+		if (havePointerLock) {
+			document.exitPointerLock();
+		}
+
+		audio.pause();
         music.pause();
         playSound(sounds[2]);
         isRunning = false;
@@ -347,6 +381,14 @@ $(function() {
     }
 
     function start() {
+		if (havePointerLock) {
+			document.body.requestPointerLock();
+		}
+
+		if (haveFullscreen) {
+			//document.body.requestFullscreen();
+		}
+
         $('canvas').show();
         $( "#closestScore1" ).empty();
         $( "#closestScore2" ).empty();
@@ -363,6 +405,17 @@ $(function() {
         $('#container').show();
         render();
     }
+
+	function pause() {
+		isRunning = false;
+		clock.stop();
+	}
+
+	function resume() {
+		isRunning = true;
+		clock.start();
+		render();
+	}
 
     function switchEndToMain(){
         $('#containerEndMenu').hide();
@@ -389,16 +442,44 @@ $(function() {
         $('#leaderboardsMenu').show();
         fetchSTopScore(successFetchLeadersScoreCbk, failureFetchClosestScoreCbk);
     }
-    function onDocumentMouseMove(event) {
-        event.preventDefault();
-        mouse.x = event.clientX;
-        mouse.y = event.clientY;
+    function onDocumentMouseMove(e) {
+        e.preventDefault();
+		console.log(e);
+		if (havePointerLock) {
+			var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+			var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+			mouse.x = Math.min(Math.max(mouse.x + movementX, 0), window.innerWidth);
+			mouse.y = Math.min(Math.max(mouse.y + movementY, 0), window.innerHeight);
+		} else {
+			mouse.x = e.clientX;
+			mouse.y = e.clientY;
+		}
     }
 
     $('#containerMainMenu').show();
     init();
 
-    document.addEventListener('mousemove', onDocumentMouseMove, false);
+	if (havePointerLock) {
+		var changeCallback = function() {
+			if (document.pointerLockElement === document.body ||
+				document.mozPointerLockElement === document.body ||
+				document.webkitPointerLockElement === document.body) {
+
+				console.log('Pointer Locked !!!');
+				document.addEventListener("mousemove", onDocumentMouseMove, false);
+			} else {
+				console.log('Pointer UnLocked !!!');
+				document.removeEventListener("mousemove", onDocumentMouseMove, false);
+			}
+		};
+
+		document.addEventListener('pointerlockchange', changeCallback, false);
+		document.addEventListener('mozpointerlockchange', changeCallback, false);
+		document.addEventListener('webkitpointerlockchange', changeCallback, false);
+	} else {
+		document.addEventListener('mousemove', onDocumentMouseMove, false);
+	}
 
     $('#publish').click(function(e) {
         var pseudo = $('#addname').val(),

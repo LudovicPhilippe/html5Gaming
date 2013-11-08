@@ -25,6 +25,7 @@ body {
   background-repeat: no-repeat;
   background-position: top center;
   font-family: 'Jockey One', 'Helvetica', sans-serif;
+  overflow: hidden;
 }
 .container {
   width: 1200px;
