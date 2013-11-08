@@ -50,6 +50,9 @@ p {
   margin: 0 auto 2em;
   padding: 2em;
 }
+#blockText{
+    text-align: center;
+}
 .main {
   width: 600px;
   margin: 0 auto;
