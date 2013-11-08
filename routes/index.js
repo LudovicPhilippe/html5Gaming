@@ -20,11 +20,11 @@ module.exports.fetchSClosestScore = function(req, res){
     //fetch player's score and closest others player's score
     var score = req.body.score;
 
-    Score.find({ "score" : { "$lt" : score } }).limit(5).sort({ "score" : 1 }).exec(function(err,results){
+    Score.find({ "score" : { "$lt" : score } }).limit(5).sort({ "score" : -1 }).exec(function(err,results){
         if (!results){
             return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
         }
-        Score.find({ "score" : { "$gt" : score } }).limit(5).sort({ "score" : 1 }).exec(function(err,results2){
+        Score.find({ "score" : { "$gt" : score } }).limit(5).sort({ "score" : -1 }).exec(function(err,results2){
             if (!results2){
                 return res.end(JSON.stringify({error : 0, errorMessage: "Server error: " + err, success : false}));
             }
