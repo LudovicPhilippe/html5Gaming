@@ -9,6 +9,7 @@
         "express": "3.3.7",
         "jade": "*",
         "async": "latest",
-        "mongoose" : "latest"
+        "mongoose" : "latest",
+        "forever-monitor": "latest"
     }
 }
