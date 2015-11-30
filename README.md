@@ -17,7 +17,9 @@ Node js and mongo db running and available
 Deployment :
 
 npm install in project's main directory 
+
 run the following command : 
+
 $ node app.js
 
 Note :
