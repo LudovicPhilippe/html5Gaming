@@ -1,14 +1,25 @@
 html5Gaming
 ===========
 
-html5 game project 3D
-
+3D html5 game project
+Web academie, second year's project
 
 Node.js
 Express
 Mongoose
 THREE.js
+love <3
 
-Jeu de reflexe dans un couloir en 3D
+requirements : 
 
-Bisous !
+Node js and mongo db running and available 
+
+Deployment :
+
+npm install in project's main directory 
+run the following command : 
+$ node app.js
+
+Note :
+
+Except for a few updates and a little refactor, this is the project i presented to the jury.
