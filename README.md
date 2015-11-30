@@ -4,17 +4,11 @@ html5Gaming
 3D html5 game project
 Web academie, second year's project
 
-
-Node.js,
-
-Express,
-
-Mongoose,
-
-THREE.js,
-
+Node.js
+Express
+Mongoose
+THREE.js
 love <3
-
 
 requirements : 
 
