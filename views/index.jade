@@ -1,5 +1,4 @@
 extends layout
-
 block content
     div.container
         header
@@ -10,7 +9,7 @@ block content
                 p Hello and welcome to our reflex tester.
                 br
                 p Prove that you are more reactive than oyster by avoiding obstacles that litter the stage, Simply move the mouse! Caution! More doors you walk over, more the difficulty increases
-                p What you need : Mouse (good luck with your trackpad) , headphones on your head and reflexes !
+                p What you need : Mouse or trackpad , headphones on your head and reflexes !
                 p Post your scores and climb the leaderboard!
                 p gl & hf
             div.buttons
@@ -27,24 +26,24 @@ block content
                 h2.fail You lose !!!!
             div
                 ul.players
-                    li#closestScore1
                     li#YouAreHere.user
+                    li#closestScore1
                     li#closestScore2
-                div(class="buttons blackbg")
-                    div.submitform
-                        p Submit your score :
-                        p#submitResponse.success Score sent !
-                        form#publish0(action="")
-                            input#addname(type="text")
-                            a#publish.btn Submit
+            div(class="buttons blackbg")
+                div.submitform
+                    p Submit your score :
+                    p#submitResponse.success Score sent !
+                    form#publish0(action="")
+                        input#addname(type="text")
+                        a#publish.btn Submit
 
-                    p
-                        a#btnswitchEndToLeaders()
-                            i.icon-list View the leaders
-                    p
-                        a#btnReStart(class="btn btn-primary btn-big btn-icon")
-                            i.icon-play
-                            span.text Play again
+                p
+                    a#btnswitchEndToLeaders()
+                        i.icon-list View the leaders
+                p
+                    a#btnReStart(class="btn btn-primary btn-big btn-icon")
+                        i.icon-play
+                        span.text Play again
         div#leaderboardsMenu.block
             div.block-title
                 h2 Top 10 players :
